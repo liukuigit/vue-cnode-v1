@@ -11,15 +11,11 @@ module.exports = {
     productionSourceMap: true,
     productionGzip: false,
     productionGzipExtensions: ['js', 'css']
-
   },
   dev: {
     env: require('./dev.env'),
-    port: 8180,
-    //autoOpenBrowser: true,
-    assetsSubDirectory: 'public',
-    assetsPublicPath: '/',
-    proxyTable: {},
-    cssSourceMap: false
+    port: 8021,
+    proxyTable: {
+    }
   }
 }

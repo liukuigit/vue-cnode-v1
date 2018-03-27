@@ -1,12 +1,12 @@
-var utils = require('./utils')
+var config = require('../config')
 var path = require('path')
 var webpack = require('webpack')
-var config = require('../config')
 var merge = require('webpack-merge')
+var utils = require('./utils')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
-var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
@@ -14,17 +14,24 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 
 module.exports = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+    loaders: utils.styleLoaders({
+      extract: true
+    })
   },
-  // cheap-module-eval-source-map is faster for development
-  devtool: '#cheap-module-eval-source-map',
+  vue: {
+    loaders: utils.cssLoaders({
+      extract: true
+    })
+  },
+  // eval-source-map is faster for development
+  devtool: '#eval-source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': config.dev.env
     }),
     new ExtractTextPlugin("[name].[chunkhash].css", {
-      allChunks: true,
-      disable: false
+        allChunks: true,
+        disable: false
     }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.optimize.OccurenceOrderPlugin(),
